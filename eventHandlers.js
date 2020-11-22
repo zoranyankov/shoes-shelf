@@ -1,7 +1,7 @@
 function navigateHandler(e) {
     e.preventDefault();
     
-    if (e.target.nodeName != 'A' && e.target.nodeName != 'BUTTON' || e.target.className == 'submitBtn') {
+    if (e.target.nodeName != 'A' || e.target.className == 'submitBtn') {
         return;
     }
 
