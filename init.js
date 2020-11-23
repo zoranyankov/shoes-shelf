@@ -1,6 +1,6 @@
 function init() {
 
-    route(location.pathname.slice(1));
+    route(location.pathname == '/' ? 'home': location.pathname.slice(1));
 
     updateHeader();
     document.getElementById('main-content').addEventListener('click', navigateHandler);
@@ -20,7 +20,7 @@ function onLoginSubmit(e) {
     }
 
     authUser.logInUser({ email, password })
-        .then (userData => {
+        .then(userData => {
             saveUser(userData.email, userData.localId);
             navigate('home');
         })
@@ -39,7 +39,7 @@ function onRegisterSubmit(e) {
         return
     }
 
-    let newUserInfo = {email, password};
+    let newUserInfo = { email, password };
 
     authUser.addUser({ email, password })
         .then(userData => {
@@ -48,8 +48,7 @@ function onRegisterSubmit(e) {
         })
 }
 
-function onCreateSubmit(e) {
-    console.log(document.forms['create-offer-form']);
+async function onCreateSubmit() {
     const formData = new FormData(document.forms['create-offer-form']);
     const user = getUser();
 
@@ -66,12 +65,37 @@ function onCreateSubmit(e) {
         return;
     }
 
-    let newOfferObj = { name, price, imgUrl, description, brand, creator, buyers };
-    shoes.addOffer(newOfferObj);
+    let newOfferObj = { name, price, imgUrl, description, brand, creator, 'buyers': '[]' };
+    await shoes.addOffer(newOfferObj);
     console.log('CREATED');
 
     navigate('home');
 
+}
+
+function openDetails(id) {
+    navigate(`details/${id}`);
+}
+
+async function onEditSubmit(id) {
+    console.log('editing');
+
+    const formData = new FormData(document.forms['edit-offer-form']);
+
+    const name = formData.get('name');
+    const price = formData.get('price');
+    const imgUrl = formData.get('imgUrl');
+    const description = formData.get('description');
+    const brand = formData.get('brand');
+
+    if (!name || !price || !imgUrl || !description || !brand) {
+        console.log('not all Data!!!');
+        return;
+    }
+    const newData = { name, price, imgUrl, description, brand };
+    await shoes.editOffer(id, newData)
+
+    navigate(`details/${id}`);
 }
 
 init();

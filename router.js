@@ -1,11 +1,15 @@
 const routes = {
-    '': 'homepage-view',
-    '/': 'homepage-view',
+    // '': 'homepage-view',
+    // '/': 'homepage-view',
     'home': 'homepage-view',
     'register': 'register-form-view',
     'login': 'login-form-view',
     'logout': 'home',
     'create-offer': 'create-offer-view',
+    'details': 'offer-details-view',
+    'edit-offer': 'edit-offer-view',
+    'buy-offer': 'offer-details-view',
+    'delete-offer': 'home',
 }
 
 const route = async (fullPath, data) => {
@@ -25,25 +29,25 @@ const route = async (fullPath, data) => {
             return navigate(routes['logout']);
         case 'home':
             templateData.shoes = await shoes.getAll();
-            console.log(templateData.shoes);
             break;
+        case '':
+            templateData.shoes = await shoes.getAll();
+            break;
+        case 'details':
+            let current = await shoes.getOne(id);
+            templateData = Object.assign(templateData, current)
+            let owner = Boolean(current.creator == user.id);
+            let notBuyed = !(current.buyers.includes(user.id));
+            templateData = Object.assign(templateData, {owner, notBuyed, id})
+            break;
+        case 'edit-offer':
+            templateData = await shoes.getOne(id);
+            templateData = Object.assign(templateData, {id})
+            break;
+        case 'delete-offer':
+            await shoes.deleteOffer(id);
+            return navigate(routes['delete-offer']);
     }
-
-    // if (shoes) {
-    //     let newShoes = [];
-    //     Object.entries(shoes)
-    //         .map(([id, info]) => {
-    //             console.log(Object.assign(info, id));
-    //     })
-
-    //     console.log(newShoes);
-
-
-
-    //     templateData = Object.assign(templateData, shoes);
-
-    // }
-
 
     path = path ? path : location.pathname;
 

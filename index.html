@@ -17,6 +17,7 @@
     <script src="/init.js" defer></script>
 
     <title>Shoe Shelf</title>
+    <base href="/" />
 </head>
 
 <body>
@@ -56,7 +57,7 @@
                 <div class="shoes">
                     {{#each shoes}}
                     <div class="shoe">
-                        <img src="{{imgUrl}}">
+                        <img onclick="openDetails('{{id}}')" src="{{imgUrl}}">
                         <h3>{{name}}</h3>
                         <a>Buy it for ${{price}}</a>
                     </div>
@@ -136,50 +137,52 @@
     </script> -->
 
     <script type="text/x-handlebars-template" id="offer-details-view">  <div class="offer-details">
-            <h1>Under Armour HOVR</h1>
+            <h1>{{brand}}</h1>
             <div class="info">
-                <img src="https://i1.t4s.cz/products/3023295-602/under-armour-ua-w-hovr-phantom-se-trek-263676-3023295-603.jpg"
+                <img src="{{imgUrl}}"
                     alt="">
-                <div class="description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facilis explicabo
-                    voluptatibus odio? Deleniti amet qui tenetur ipsa enim blanditiis laboriosam distinctio, dignissimos
-                    cupiditate, delectus autem. Explicabo exercitationem voluptatibus reprehenderit repellat. Lorem
-                    ipsum dolor, sit amet consectetur adipisicing elit. Tempore reiciendis maiores aliquid nobis,
-                    accusantium dolore iste ipsa atque deserunt corrupti maxime, alias neque libero temporibus expedita
-                    magni perferendis aut nostrum.
+                <div class="description">{{description}}
                     <br>
                     <br>
-                    <p class="price">$149.99</p>
+                    <p class="price">${{price}}</p>
                 </div>
             </div>
             <div class="actions">
-                <a>Edit</a>
-                <a>Delete</a>
-                <a>Buy</a>
-                <span>You bought it</span>
+                {{#if owner}}
+                    <a href="edit-offer/{{id}}">Edit</a>
+                    <a href="delete-offer/{{id}}">Delete</a>
+                {{else}}
+                {{#if notBuyed}}
+                        <a href="buy-offer/{{id}}">Buy</a>
+                    {{else}}
+                        <span>You bought it</span>
+                    {{/if}}
+                {{/if}}
             </div>
         </div>
     </script>
 
-    <script type="text/x-handlebars-template" id="edit-offer-view"><h1>Edit Offer</h1>
+    <script type="text/x-handlebars-template" id="edit-offer-view">
+        <h1>Edit Offer</h1>
         <p class="message"></p>
-        <form>
+        <form id="edit-offer-form">
             <div>
-                <input type="text" placeholder="Name...">
+                <input type="text" placeholder="Name..." value="{{name}}" name="name">
             </div>
             <div>
-                <input type="text" placeholder="Price...">
+                <input type="text" placeholder="Price..." value="{{price}}" name="price">
             </div>
             <div>
-                <input type="text" placeholder="Image url...">
+                <input type="text" placeholder="Image url..." value="{{imgUrl}}" name="imgUrl">
             </div>
             <div>
-                <textarea placeholder="Give us some description about this offer..."></textarea>
+                <textarea placeholder="Give us some description about this offer..." name="description">{{description}}</textarea>
             </div>
             <div>
-                <input type="text" placeholder="Brand...">
+                <input type="text" placeholder="Brand..." value="{{brand}}" name="brand">
             </div>
             <div>
-                <button>Edit</button>
+                <button onclick="onEditSubmit('{{id}}')">Edit</button>
             </div>
         </form>
     </script>

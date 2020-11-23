@@ -81,7 +81,9 @@ const shoes = {
         let resultData = await request(getOneUrl, 'DELETE');
         return resultData;
     },
-    // async editoffer() {
-
-    // }
+    async editOffer(id, obj) {
+        let getOneUrl = `${dbUrl}${id}.json`
+        let resultData = await request(getOneUrl, 'PATCH', obj);
+        return resultData;
+    },
 }
