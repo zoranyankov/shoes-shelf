@@ -162,7 +162,7 @@ form textarea {
     cursor: pointer;
 }
 
-p.price {
+p.price, p.buyers{
     color: var(--main-blue);
     font-weight: bold;
 }
@@ -293,6 +293,12 @@ form div button {
 
 span{
     color: var(--main-orange);
+}
+
+span.counter {
+    color: var(--main-blue);
+    font-size: 20px;
+    font-weight: normal;
 }
 
 .user-info div:nth-child(1) p {

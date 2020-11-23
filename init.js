@@ -2,6 +2,11 @@ function init() {
 
     route(location.pathname == '/' ? 'home': location.pathname.slice(1));
 
+
+    // location.pathname.addEventListener('change', e => {e.preventDefault(); navigate(location.pathname.slice(1))});
+
+    // window.addEventListener('hashchange', e => {e.preventDefault(); route(location.pathname.slice(1))});
+
     updateHeader();
     document.getElementById('main-content').addEventListener('click', navigateHandler);
     document.querySelector('div.nav').addEventListener('click', navigateHandler);
@@ -41,7 +46,7 @@ function onRegisterSubmit(e) {
 
     let newUserInfo = { email, password };
 
-    authUser.addUser({ email, password })
+    authUser.addUser(newUserInfo)
         .then(userData => {
             saveUser(userData.email, userData.localId);
             navigate('home');
@@ -50,6 +55,7 @@ function onRegisterSubmit(e) {
 
 async function onCreateSubmit() {
     const formData = new FormData(document.forms['create-offer-form']);
+    
     const user = getUser();
 
     const name = formData.get('name');
@@ -58,18 +64,22 @@ async function onCreateSubmit() {
     const description = formData.get('description');
     const brand = formData.get('brand');
     const creator = user.id;
-    const buyers = [];
+    const buyers = {};
 
     if (!name || !price || !imgUrl || !description || !brand || !creator) {
         console.log('not all Data!!!');
         return;
     }
 
-    let newOfferObj = { name, price, imgUrl, description, brand, creator, 'buyers': '[]' };
-    await shoes.addOffer(newOfferObj);
-    console.log('CREATED');
+    let newOfferObj = { name, price, imgUrl, description, brand, creator };
+    await shoes.addOffer(newOfferObj)
+        .then(({newOfferId}) => {
+            console.log(newOfferId);
+            shoes.addBuyer(newOfferId, '');
+            console.log('CREATED');
+            navigate('home');
+        })
 
-    navigate('home');
 
 }
 

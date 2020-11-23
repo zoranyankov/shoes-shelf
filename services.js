@@ -8,12 +8,15 @@ function updateHeader() {
     if (!isLogged) {
         document.querySelector('div.nav li.create').style.display = 'none';
         document.querySelector('div.nav li.welcome').style.display = 'none';
-        document.querySelector('div.nav a.logo').href = 'register';
+        document.querySelector('div.nav a.logo > img').setAttribute('onclick', "navigate('register')");
         return
     }
     document.querySelector('div.nav li.welcome').innerHTML = `Welcome, ${user.email} | <a href="logout">Logout</a>`;
     document.querySelector('div.nav li.create').style.display = 'block';
     document.querySelector('div.nav li.welcome').style.display = 'block';
+    let logoLink = document.querySelector('div.nav a.logo > img');
+    logoLink.removeAttribute('onclick', "navigate('register')");
+    logoLink.setAttribute('onclick', "navigate('home')");
 }
 
 const request = async function (url, method, body) {
@@ -84,6 +87,11 @@ const shoes = {
     async editOffer(id, obj) {
         let getOneUrl = `${dbUrl}${id}.json`
         let resultData = await request(getOneUrl, 'PATCH', obj);
+        return resultData;
+    },
+    async addBuyer(id, buyer) {
+        let addBuyerUrl = `${dbUrl}${id}/buyers.json`
+        let resultData = await request(addBuyerUrl, 'PATCH', buyer);
         return resultData;
     },
 }

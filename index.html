@@ -79,7 +79,8 @@
         </div>
     </script>
 
-    <script type="text/x-handlebars-template" id="create-offer-view"><h1>Create New Offer</h1>
+    <script type="text/x-handlebars-template" id="create-offer-view">
+        <h1>Create New Offer</h1>
         <p class="message"></p>
         <form id="create-offer-form">
             <div>
@@ -142,6 +143,9 @@
                 <img src="{{imgUrl}}"
                     alt="">
                 <div class="description">{{description}}
+                    <br>
+                    <br>
+                    <p class='buyers'>Buyers: <span class='counter'>{{buyersCount}}</span></p>
                     <br>
                     <br>
                     <p class="price">${{price}}</p>

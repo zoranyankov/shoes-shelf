@@ -12,7 +12,7 @@ const routes = {
     'delete-offer': 'home',
 }
 
-const route = async (fullPath, data) => {
+const route = async (fullPath) => {
     const contentEl = document.getElementById('main-content');
     let [path, id] = fullPath.split('/');
     console.log(fullPath);
@@ -37,10 +37,15 @@ const route = async (fullPath, data) => {
             let current = await shoes.getOne(id);
             templateData = Object.assign(templateData, current)
             let owner = Boolean(current.creator == user.id);
-            let notBuyed = !(current.buyers.includes(user.id));
-            templateData = Object.assign(templateData, {owner, notBuyed, id})
+            // let notBuyed = !(current.buyers.includes(user.id));
+            // let buyersCount = current.buyers.length;
+            templateData = Object.assign(templateData, {owner, /*notBuyed,*/ id/*, buyersCount*/})
             break;
         case 'edit-offer':
+            templateData = await shoes.getOne(id);
+            templateData = Object.assign(templateData, {id})
+            break;
+        case 'buy-offer':
             templateData = await shoes.getOne(id);
             templateData = Object.assign(templateData, {id})
             break;
@@ -58,8 +63,8 @@ const route = async (fullPath, data) => {
     contentEl.innerHTML = newContent;
 }
 
-const navigate = (path) => {
+const navigate = (fullPath) => {
     updateHeader();
-    history.pushState({}, '', path);
-    route(path);
+    history.pushState({}, '', fullPath);
+    route(fullPath);
 }
