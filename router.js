@@ -29,7 +29,7 @@ const route = async (fullPath) => {
             return navigate(routes['logout']);
         case 'home':
             let allShoes = await shoes.getAll();
-            if (allShoes) {
+            if (allShoes && user) {
                 allShoes.map(shoe => {
                     shoe.buyed = shoe.buyers ? Object.values(shoe.buyers).some(buyer => buyer == user.email) : false;
                     shoe.owner = Boolean(shoe.creator == user.email);
