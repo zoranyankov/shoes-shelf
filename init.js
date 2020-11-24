@@ -2,9 +2,7 @@ function init() {
 
     route(location.pathname == '/' ? 'home': location.pathname.slice(1));
 
-
     // location.pathname.addEventListener('change', e => {e.preventDefault(); navigate(location.pathname.slice(1))});
-
     // window.addEventListener('hashchange', e => {e.preventDefault(); route(location.pathname.slice(1))});
 
     updateHeader();
@@ -63,7 +61,7 @@ async function onCreateSubmit() {
     const imgUrl = formData.get('imgUrl');
     const description = formData.get('description');
     const brand = formData.get('brand');
-    const creator = user.id;
+    const creator = user.email;
     const buyers = {};
 
     if (!name || !price || !imgUrl || !description || !brand || !creator) {

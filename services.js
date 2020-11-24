@@ -30,6 +30,7 @@ const request = async function (url, method, body) {
         })
     }
     let response = await fetch(url, obj);
+    
     if (response.status != 200) {
         console.log('!=200');
         return ;
@@ -91,7 +92,7 @@ const shoes = {
     },
     async addBuyer(id, buyer) {
         let addBuyerUrl = `${dbUrl}${id}/buyers.json`
-        let resultData = await request(addBuyerUrl, 'PATCH', buyer);
+        let resultData = await request(addBuyerUrl, 'POST', buyer);
         return resultData;
     },
 }

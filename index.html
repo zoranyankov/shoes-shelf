@@ -43,7 +43,7 @@
         </div>
     </header>
     <main>
-        <div id="main-content">Still nothing to show</div>
+        <div id="main-content"><span style="font-size:x-large; text-align: center; display: block;">STILL NOTHING TO SHOW</span></div>
     </main>
 
     <footer>
@@ -59,7 +59,15 @@
                     <div class="shoe">
                         <img onclick="openDetails('{{id}}')" src="{{imgUrl}}">
                         <h3>{{name}}</h3>
-                        <a>Buy it for ${{price}}</a>
+                        {{#if buyed}}
+                            <span>You Already <strong>Bought</strong> it for ${{price}}</span>
+                        {{else}}
+                            {{#if owner}}
+                                <span>You <strong>Sell</strong> this one for ${{price}}</span>
+                            {{else}}
+                                <a href="buy-offer/{{id}}">Buy it for ${{price}}</a>
+                            {{/if}}
+                        {{/if}}
                     </div>
                     {{else}}
                         <span style="font-size:larger;">No Shoes to display. Be the first to create a new offer...</span>
@@ -104,7 +112,8 @@
         </form>
     </script>
 
-    <!-- <script type="text/x-handlebars-template" id="shoes-view"><div class="shoes">
+    <!-- <script type="text/x-handlebars-template" id="shoes-view">
+        <div class="shoes">
         <div class="shoe">
             <img src="https://i1.t4s.cz/products/ar4149-001/nike-air-zoom-pegasus-36-gs-251390-ar4149-001.jpeg">
             <h3>Nike Pegasus</h3>
@@ -137,7 +146,8 @@
     </div>
     </script> -->
 
-    <script type="text/x-handlebars-template" id="offer-details-view">  <div class="offer-details">
+    <script type="text/x-handlebars-template" id="offer-details-view">  
+        <div class="offer-details">
             <h1>{{brand}}</h1>
             <div class="info">
                 <img src="{{imgUrl}}"
@@ -156,10 +166,10 @@
                     <a href="edit-offer/{{id}}">Edit</a>
                     <a href="delete-offer/{{id}}">Delete</a>
                 {{else}}
-                {{#if notBuyed}}
-                        <a href="buy-offer/{{id}}">Buy</a>
-                    {{else}}
+                    {{#if buyed}}
                         <span>You bought it</span>
+                    {{else}}
+                        <a href="buy-offer/{{id}}">Buy</a>
                     {{/if}}
                 {{/if}}
             </div>
@@ -191,7 +201,8 @@
         </form>
     </script>
 
-    <script type="text/x-handlebars-template" id="login-form-view"><h1>Login</h1>
+    <script type="text/x-handlebars-template" id="login-form-view">
+        <h1>Login</h1>
         <p class="form-info">Don't have account?
             <a href="register">Register now</a> and fix that!
         </p>
@@ -214,7 +225,7 @@
             <p class="form-info">Already registered?
             <a href="login">Login now</a> and have some fun!
             </p>
-            <form id="register-form" onsubmit="onRegisterSubmit(event)">
+            <form id="register-form" >
                 <div>
                     <input type="email" placeholder="Email..." name="email">
                 </div>
@@ -226,7 +237,7 @@
                 </div>
                 <div>
                     <p class="message"></p>
-                    <button class="submitBtn" >Register</button>
+                    <button class="submitBtn" onclick="onRegisterSubmit(event)">Register</button>
                 </div>
             </form>
     </script>

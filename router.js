@@ -15,39 +15,50 @@ const routes = {
 const route = async (fullPath) => {
     const contentEl = document.getElementById('main-content');
     let [path, id] = fullPath.split('/');
-    console.log(fullPath);
-    console.log(path);
-    console.log(id);
 
     const user = getUser();
     let isLogged = Boolean(user);
     let templateData = isLogged ? { 'email': user.email, isLogged } : '';
+    let buyed;
+    let owner;
+    let currentShoe;
 
     switch (path) {
         case 'logout':
             clearUser();
             return navigate(routes['logout']);
         case 'home':
-            templateData.shoes = await shoes.getAll();
+            let allShoes = await shoes.getAll();
+            if (allShoes) {
+                allShoes.map(shoe => {
+                    shoe.buyed = shoe.buyers ? Object.values(shoe.buyers).some(buyer => buyer == user.email) : false;
+                    shoe.owner = Boolean(shoe.creator == user.email);
+                });
+            }
+            templateData.shoes = allShoes;
+            templateData = Object.assign(templateData, { buyed });
             break;
         case '':
             templateData.shoes = await shoes.getAll();
             break;
         case 'details':
-            let current = await shoes.getOne(id);
-            templateData = Object.assign(templateData, current)
-            let owner = Boolean(current.creator == user.id);
-            // let notBuyed = !(current.buyers.includes(user.id));
-            // let buyersCount = current.buyers.length;
-            templateData = Object.assign(templateData, {owner, /*notBuyed,*/ id/*, buyersCount*/})
+            currentShoe = await shoes.getOne(id);
+            templateData = Object.assign(templateData, currentShoe)
+            owner = Boolean(currentShoe.creator == user.email);
+            buyed = currentShoe.buyers ? Object.values(currentShoe.buyers).some(buyer => buyer == user.email) : false;
+            let buyersCount = currentShoe.buyers ? Object.keys(currentShoe.buyers).length : 0;
+            templateData = Object.assign(templateData, { owner, buyed, id, buyersCount })
             break;
         case 'edit-offer':
             templateData = await shoes.getOne(id);
-            templateData = Object.assign(templateData, {id})
+            templateData = Object.assign(templateData, { id })
             break;
         case 'buy-offer':
-            templateData = await shoes.getOne(id);
-            templateData = Object.assign(templateData, {id})
+            await shoes.addBuyer(id, user.email);
+            currentShoe = await shoes.getOne(id);
+            console.log(currentShoe);
+            buyed = currentShoe.buyers ? Object.values(currentShoe.buyers).some(buyer => buyer == user.email) : false;
+            templateData = Object.assign(templateData, { buyed, id, ...currentShoe });
             break;
         case 'delete-offer':
             await shoes.deleteOffer(id);
