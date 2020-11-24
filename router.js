@@ -34,6 +34,10 @@ const route = async (fullPath) => {
                     shoe.buyed = shoe.buyers ? Object.values(shoe.buyers).some(buyer => buyer == user.email) : false;
                     shoe.owner = Boolean(shoe.creator == user.email);
                 });
+                let buyedOne = allShoes.filter(x => x.buyers);
+                let notBuyedOne = allShoes.filter(x => !x.buyers);
+                buyedOne.sort((a, b) => (Object.keys(b.buyers).length) - (Object.keys(a.buyers).length));
+                allShoes = buyedOne.concat(notBuyedOne);
             }
             templateData.shoes = allShoes;
             templateData = Object.assign(templateData, { buyed });
